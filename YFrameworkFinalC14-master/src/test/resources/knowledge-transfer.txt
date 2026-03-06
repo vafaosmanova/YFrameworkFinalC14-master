@@ -1,0 +1,218 @@
+-----------------------------------------------------------------------------------------
+THIS FILE WILL CONTAIN KNOWLEDGE TRANSFER(SHARING WITH INFORMATION)
+KT - KNOWLEDGE TRANSFER is a common meeting for people who are new to the project and need to get started
+-----------------------------------------------------------------------------------------
+A. Explain in which case we use scenario outline and in which case we use the table?
+
+    1A. Scenario Outline should have an Example table. This example table will have multiple sets of data.
+    - We use Scenario Outline where we want to run a scenario from the perspective of multiple users that will use different sets of data.
+    - The data that is in Example Table can be used across all Scenario.
+    - The intention is that you run the same Scenario with multiple sets of data
+    - A hint to recognize if a case is good for Scenario Outline would: if you can split your scenario outline in individual scenarios it is a good case
+
+    2A. Data Table - when we have to provide data to our step in a dynamic way we could use parameters.
+    - Parameters can be used to pass data from steps to java methods.
+    - These parameters are usually a short data that can be a string number etc...
+    - The question is what do we do when we need to pass some data to one step that is much more complex.
+    - We use data table when our parameter becomes too complex to pass as a string or number
+    - For example if you pass some registration info about a user
+    -- If passing as a string we will have to apply some sort of separation
+    -- Also, each time we will have to read and understand the data to be able to interact with it
+    -- That's why we form a data table that will be our more complex parameter for current step
+    -- Then we can structure the data in more readable way as a List, Map, List of Maps
+
+-----------------------------------------------------------------------------------------
+
+B. Question is regarding repetitive steps in scenarios.
+- Let's say we have 3 user stories and a couple of the steps in those stories are similar.
+- What is the best way of executing those stories:
+  -- a. extend the classes where we have the steps
+  -- b. dump them to the steps that we already have, like accumulating them in one go as we did with ohrm home page or user login steps?
+
+1B. The whole idea of cucumber when it comes to steps that they are reusable.
+   - That's why we have parametrization
+   - Data Tables
+   - Scenario Outline
+   - The idea is to make our steps as reusable as possible
+   - When you write a scenario in an existing framework one of the golden rules will be stay DRY! - Do not Repeat Yourself!
+   - Remember that when cucumber looks for a step definition it won't look in a specific class but glue package (the one mentioned in test runner)
+   - When cucumber checks that package it scans all classes and identifies if the step is already defined or not
+-----------------------------------------------------------------------------------------
+
+C. ENUMS vs Config files
+- ENUM is nothing than a Constant wrapped in a specific type
+- Config is an external file that contains configs/settings/hosts/endpoints
+
+- If we talk about base URL - it is more common to place in config files
+- Endpoints are a candidate to be stored in any form - as constant or configuration
+- Names of pages, magic numbers, tabs, etc... best stored in Constants
+
+-----------------------------------------------------------------------------------------
+
+D. Uploading Files and Downloading Files
+- The web applications sometimes might have the functionality to upload a file to it
+- Some cases(common) will have that functionality done with html as input tag - we will handle with Selenium
+
+- Some other cases there will be more complex upload strategies - you need to open OS native window, you drag and drop the file from your computer
+  - - Robot AWT class that comes as a Java API  can handle(automate) keystrokes and mouse actions on OS native level
+  - - It will not be covered ion our sessions because it is outside of the scope
+
+  1. Uploading a file with selenium:
+  - Locate the input tag that will receive the file
+  - use the element located and sendKeys() with file path to upload the file
+  -- make sure your path to the file is dynamic with System.getProperty("user.dir")
+  -- make sure the path uses appropriate file separators based on your OS - use Paths.get()
+
+  2. Downloading a file
+  - To change the download directory we do it at setup level when the driver is initialized
+    In our case it is ion BrowserFactory
+    -- create a map
+    -- put the key as "download.default_directory" and value as path of your desired directory
+    --- to get dynamically the path use above-mentioned strategies
+    -- add this map to ChromeOptions object as options.setExperimentalOptions("prefs", map)
+    -- add this ChromeOptions object to the driver instance constructor
+       new ChromeDriver(options);
+  - Next simply click on downloadable link or file or button.
+  - After, we have different way to verify the file
+
+  -----------------------------------------------------------------------------------------
+
+Logging - we can utilize different logging frameworks - Log4J, Self4J, Custom, Apache
+  Levels of logs:
+  - Debug - something that you want to include in your setup, tear down logic
+    the debug logs are intended to help you debug an issue and the point is we place it in some code logics that resolve the framework
+  - Info - these logs are for information purposes, we want to include them in you step definitions to keep the track of the execution
+  - Warn - warning of an issue
+
+  -----------------------------------------------------------------------------------------
+  Git commands:
+  1. git clone
+  2. git status
+  3. git add
+  -- git add path
+  -- git add .
+  -- git add -A
+  4. git commit -m""
+  5. git push
+    -- git push origin master
+  6. git pull
+  7. git config user.name
+  8. git config user.email
+  9. git branch
+  10. git branch name
+  11. git checkout branchName
+  12. git log
+
+  Maven:
+  mvn test
+  mvn clean install
+  mvn clean
+  mvn verify
+  mvn dependency tree
+
+  commit messages have rules? - This is more about company convention rules
+
+-----------------------------------------------------------------------------------------
+BD Connection - How do you do DB test/verification
+Technical aspect:
+
+- Understand how to run test manually (data flow logic)
+1. Understand what is the DB type
+2. Include the drivers in you POM.XML
+3. Load and register the driver
+4. Create a connection with given creds
+5. Create a statement
+6. Execute a query
+7. Get a response and process it
+8. Close all the connections at the end
+
+-----------------------------------------------------------------------------------------
+
+CSV - Comma Separated File
+
+How to work with Excel files:
+
+- How QA teams are utilizing the Excel files?
+-- Documenting Test Cases (Rare).
+-- Storing Configurations for Project (Not common).
+-- Creating Reports (More common).
+-- Data Driven Tests (Common).
+
+Q: How we can access (read and write) excel files?
+A: We need to add external libraries from Apache POI
+
+- Apache POI will allow you to interact with all kinds of Microsoft Files
+- Word, Excel, PowerPoint etc...
+- Our scope that we will focus will be on Excel Support.
+
+- Apache POI has support for generally two types of excel files (old and new files)
+-- HSSF - .xls (Old version of excel files that were created before 2007) -  Horrible Spreadsheet format
+-- XSSF - .xlsx (Newer version of excel files) -  XML Spreadsheet Format
+
+-- (I sent you 2 xlsx files in slack)
+- download them
+- go to your download folder
+- copy those 2 files and paste them in test_data in your project
+
+
+Technical Part:
+
+---------------------------------------------------------------------------------
+
+  # Product Backlog - A collection of tasks (user stories, tasks, bugs) for upcoming sprint or couple of sprints
+  # Epic - Represents a larger scale of a feature - Usually goes more that 8 points and is split down in multiple user stories
+  # Requirements are presented as AC -Acceptance Criteria
+
+  # Initiative (A vagues need from the business that involves building something new) - User Account Management (Redesign)
+  # - Initiative will be broken down on epics by business people (UI Login, Sign In forms - Login Backend, Sign In Backend)
+  # - Take Epics and brake down to User Stories (UI Login Form, UI Sign In Form, UI Components)
+  # - Increment - Quarter (3 months) - 6 sprints
+  # - Spread all user stories and epics for upcoming sprints
+  # - Sprint - Backlog
+    # - They will take the backlog tickets and groom them, give them points
+    # - Each ticket will have Specific Requirements
+        - As a User I want to be able toi create an account
+        - As a Client I want to be able to login
+               - Rule 1: User can login with an existing account
+        - As a User I can create an account with a new email
+            - Rules:
+                - Rule 1: User cannot use a already used email
+                - Rule 2: User can create an account with emails of such domains: comp.com. comp.io
+                - Rule 3: User cannot leave the email field empty
+
+        - As a User I can create an account with a password that has more than 5 and less than 12 chrs
+
+  # Rules can be included in your feature files as to bundle few scenarios together
+  # NOTE!!! - Rules can be used in cucumber v.6.x.x and higher.
+
+---------------------------------------------------------------------------------
+-- FINAL SESSION --
+1. Parallel Testing
+- Our framework can be run in parallel with surefire plugin
+    - In surefire plugin we can customize the <threadCount> to specify how many threads we want to utilize
+- Or we can run it in parallel remotely with Selenium Grid
+- If we do not provide the above tools the tests will run sequentially and locally which is not efficient
+
+2. Executing the tests remotely
+- RemoteWebDriver can handle the remote execution by providing the IP address of the machine we want to run in the tests
+
+3. Integrating the RemoteWebDriver and Selenium Grid is a great architectural decision
+- We now can execute our tests on (cloud) another machine, and Selenium Grid can orchestrate the way we execute it (parallel/cross browser/cross OS)
+
+4. Commonly nowadays, companies are using (or switched to using) Cloud Computing Services instead of On-Premise Servers.
+- Companies are renting computing power from cloud providers such as: AWS, AZURE, GCP, etc...
+- We have an overview of AWS since it is the major and the pioneer of Cloud Computing
+
+-- NOTE --
+All the set up and configurations will be done by DevOps, usually you as a tester don't have access to the AWS platform dashboard.
+All the details os IP address etc.. will be given to you from the DevOps or Devs
+-- NOTE --
+
+5. Jenkins??
+
+
+
+
+
+
+
